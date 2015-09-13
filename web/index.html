@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Court Finder</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="Resources/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="Resources/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="CourtFind.css">
+        
+        <link rel="stylesheet" href="Resources/OpenLayers-2.13.1/theme/default/style.css" type="text/css">
+    </head>
+    <body>
+        <nav class="navbar navbar-fixed-top navbar-inverse header">
+            <div class="container headerBar">
+                <div class="navbar-header">
+                    <!--button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button-->
+                    <a href="#menu-toggle" id="menu-toggle">
+                        <span class="glyphicon glyphicon-plus courtFindExpander"></span>
+                    </a>
+                    <label class="navbar-brand " href="#">STL Court Connect</label>
+                </div>
+                <!--div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="#">Municipal Courts</a></li>
+                        <li><a href="#about">Citation Finder</a></li>
+                        <li><a href="#contact">Violation Finder</a></li>
+                    </ul>
+                </div-->
+            </div>
+        </nav>
+        
+        <!-- OpenLayers Map element -->
+        <div id="map"></div>
+        
+        <!-- Expanding list element -->
+        <div id="wrapper" class="">
+            <div id="sidebar-wrapper" class="sideBar">
+                <ul id="sidebarList" class="sidebar-nav">
+                    <!--li class="sidebar-brand">
+                        <a href="#">
+                            Start Bootstrap
+                        </a>
+                    </li-->
+                    <li>
+                        <a id="ticketsButton" class="actionItems" href="#">Tickets, Citations & Violations</a>
+                        <ul id="ticketsSubList">
+                            <li>
+                                <a data-reveal="payTickets" class="actionItems" href="#">Pay my ticket</a>
+                            </li>
+                            <li>
+                                <a data-reveal="lostTicket" class="actionItems" href="#">Lost my ticket</a>
+                            </li>
+                            <li>
+                                <a data-reveal="contestTicket" class="actionItems" href="#">Contest my ticket</a>
+                            </li>
+                            <li>
+                                <a data-reveal="findWarrants" class="actionItems" href="#">Warrants</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="courtsButton" class="actionItems" href="#">Court Services</a>
+                        <ul id="courtsSubList">
+                            <li>
+                                <a data-reveal="findCourtLocation" class="actionItems" href="#">Find court location</a>
+                            </li>
+                            <li>
+                                <a data-reveal="findCourtDates" class="actionItems" href="#">Find my court date</a>
+                            </li>
+                            <li>
+                                <a style="color: #FFFFFF;" href="#">Check court wait times</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="communityButton" class="actionItems" href="#">Community Services</a>
+                        <ul id="communitySubList">
+                            <li>
+                                <a data-reveal="comServEligibility" class="actionItems" href="#">Eligibility</a>
+                            </li>
+                            <li>
+                                <a data-reveal="comServCredit" class="actionItems" href="#">Get credit</a>
+                            </li>
+                            <li>
+                                <a data-reveal="comServVolunteer" class="actionItems" href="#">Volunteer</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- Pay Tickets section -->
+                <div id="payTickets" class="hiddenElements">
+                    <a data-hide="payTickets" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>PAY TICKETS</h2>
+                    <label>Input location of ticket</label>
+                    <input id="geoCodeInput" type="text" />
+                    <button id="findCourtButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements"></div>
+                    <div class="municipalityInfo hiddenElements">
+                        <h3 class="municipalityLabel"></h3>
+                        <br/>
+                        <label>Want to pay in person?
+                            <br/>Here's the address:
+                            <br/>
+                            <br/>
+                        </label>
+                        <br/>
+                        <label class="municipalityFullAddress"></label>
+                        <br/>
+                        <br/>
+                        <label>Want to pay online?
+                            <br/>Go here:
+                            <br/>
+                        </label>
+                        <br/>
+                        <a class="municipalWebsite" ></a>
+                        <label>
+                            <br/>
+                            <br/>And of course... don't forget a valid form of payment!
+                        </label>
+                    </div>
+                </div>
+                <!-- Lost Ticket section -->
+                <div id="lostTicket" class="hiddenElements">
+                    <a data-hide="lostTicket" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>LOST TICKETS</h2>
+                    <label>Input location of incident in lost ticket</label>
+                    <input id="geoCodeInput" type="text" />
+                    <button id="findCourtButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements"></div>
+                    <div class="municipalityInfo hiddenElements">
+                        <label class="municipalityLabel"></label>
+                        <br/>
+                        <label>To recover a lost ticket, please visit your local municipal court.
+                            <br/>Here's the address:
+                            <br/>
+                            <br/>
+                        </label>
+                        <br/>
+                        <label class="municipalityFullAddress"></label>
+                        <br/>
+                        <br/>
+                        <label>Prefer online?
+                            <br/>Go here:
+                            <br/>
+                        </label>
+                        <br/>
+                        <a class="municipalWebsite" ></a>
+                        <br/>
+                        <label>You will need at least one of the following:</label>
+                        <ul>
+                            <li>
+                                <label>Your citation number and your D.O.B.</label>
+                            </li>
+                            <li>
+                                <label>Your driver's license information</label>
+                            </li>
+                            <li>
+                                <label>Your SSN</label>
+                            </li>
+                            <li>
+                                <label>Your license plate information</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Contest Tickets section -->
+                <div id="contestTicket" class="hiddenElements">
+                    <a data-hide="contestTicket" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>CONTEST TICKETS</h2>
+                    <label>Input location of ticket</label>
+                    <input id="geoCodeInput" type="text" />
+                    <button id="findCourtButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements"></div>
+                    <div class="municipalityInfo hiddenElements">
+                        <label class="municipalityLabel"></label>
+                        <br/>
+                        <label>To contest a ticket you will have to head to your local municipal court.
+                            <br/>Here's the address:
+                            <br/>
+                            <br/>
+                        </label>
+                        <br/>
+                        <label class="municipalityFullAddress"></label>
+                        <br/>
+                        <br/>
+                        <label>Want to view its online resources?
+                            <br/>Go here:
+                            <br/>
+                        </label>
+                        <br/>
+                        <a class="municipalWebsite" ></a>
+                        <br/>
+                        <label>Additional helpful resources:</label>
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0);" onclick="window.open('https://www.stlouis-mo.gov/government/departments/treasurer/parking-violations/booting-and-towing.cfm');">
+                                    Boot Removal Information</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" onclick="window.open('https://www.stlouis-mo.gov/government/departments/treasurer/parking-violations/parking-violation-fines.cfm');">
+                                    St. Louis Parking Policy</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Find warrants section -->
+                <div id="findWarrants" class="hiddenElements">
+                    <a data-hide="findWarrants" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>WARRANT LOOKUP</h2>
+                    <label>Resolving a warrant can be an intimidating task but don't worry - just enter in some personal information below and we'll direct you to the right municipal court so that it can be resolved!</label>
+                    <label>First name</label>
+                    <input id="firstNameInput" value="amanda" type="text" />
+                    <label>Last name</label>
+                    <input id="lastNameInput" value="hall" type="text" />
+                    <label>Date of birth</label>
+                    <input id="dateInput" value="1978-02-06" type="text" />
+                    <label>Driver's license number</label>
+                    <input id="licenseInput" value="T548660236" type="text" />
+                    <button id="findWarrantsButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements">
+                        <label>WARRANT(S)</label>
+                        <div id="hasWarrant"></div>
+                        <br/>
+                        <label>VIOLATIONS(S)</label>
+                        <div id="hasViolation"></div>
+                    </div>
+                </div>
+                <!-- Find Court Date section -->
+                <div id="findCourtDates" class="hiddenElements">
+                    <a data-hide="findCourtDates" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>FIND COURT DATES</h2>
+                    <label>First name</label>
+                    <input id="firstNameInput" value="amanda" type="text" />
+                    <label>Last name</label>
+                    <input id="lastNameInput" value="hall" type="text" />
+                    <label>Date of birth</label>
+                    <input id="dateInput" value="1978-02-06" type="text" />
+                    <label>Driver's license number</label>
+                    <input id="licenseInput" value="T548660236" type="text" />
+                    <button id="findCourtDatesButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements">
+                        
+                    </div>
+                </div>
+                <!-- Find courts section -->
+                <div id="findCourtLocation" class="hiddenElements">
+                    <a data-hide="findCourtLocation" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>FIND COURTS</h2>
+                    <label>Input your location</label>
+                    <input id="geoCodeInput" type="text" />
+                    <button id="findCourtButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements"></div>
+                    <div class="municipalityInfo hiddenElements">
+                        <label class="municipalityLabel"></label>
+                        <br/>
+                        <label>Want to find out more information about your local municipal court?
+                            <br/>Here's the address:
+                            <br/>
+                            <br/>
+                        </label>
+                        <br/>
+                        <label class="municipalityFullAddress"></label>
+                        <br/>
+                        <br/>
+                        <label>Want to view its online resource?
+                            <br/>Go here:
+                            <br/>
+                        </label>
+                        <br/>
+                        <a class="municipalWebsite" ></a>
+                    </div>
+                </div>
+                <!-- Community service eligibility -->
+                <div id="comServEligibility" class="hiddenElements">
+                    <a data-hide="comServEligibility" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>COMMUNITY SERVICE ELIGIBILITY</h2>
+                    <label>St. Louis' municipalities approve or deny community service in lieu of traffic tickets on a case-by-case basis. Enter in the address of the ticket and we'll point you in the right direction!</label>
+                    <label>Input the ticket's location</label>
+                    <input id="geoCodeInput" type="text" />
+                    <button id="findCourtButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements"></div>
+                    <div class="municipalityInfo hiddenElements">
+                        <label class="municipalityLabel"></label>
+                        <br/>
+                        <label>Want to find out more information about your local municipal court?
+                            <br/>Here's the address:
+                            <br/>
+                            <br/>
+                        </label>
+                        <br/>
+                        <label class="municipalityFullAddress"></label>
+                        <br/>
+                        <br/>
+                        <label>Want to view its online resource?
+                            <br/>Go here:
+                            <br/>
+                        </label>
+                        <br/>
+                        <a class="municipalWebsite" ></a>
+                    </div>
+                </div>
+                <!-- Community service credit -->
+                <div id="comServCredit" class="hiddenElements">
+                    <a data-hide="comServCredit" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>GET COMMUNITY SERVICE CREDIT</h2>
+                    <label>Your local municipality judge will be able to decide whether or not your community service time qualifies you for traffic ticket credit. Enter in the address of the traffic incident below and we'll get you started!</label>
+                    <label>Input the ticket's location</label>
+                    <input id="geoCodeInput" type="text" />
+                    <button id="findCourtButton" type="button" class="btn btn-success">Find</button>
+                    <div class="searchSpans hiddenElements"></div>
+                    <div class="municipalityInfo hiddenElements">
+                        <label class="municipalityLabel"></label>
+                        <br/>
+                        <label>Want to find out more information about your local municipal court?
+                            <br/>Here's the address:
+                            <br/>
+                            <br/>
+                        </label>
+                        <br/>
+                        <label class="municipalityFullAddress"></label>
+                        <br/>
+                        <br/>
+                        <label>Want to view its online resource?
+                            <br/>Go here:
+                            <br/>
+                        </label>
+                        <br/>
+                        <a class="municipalWebsite" ></a>
+                    </div>
+                </div>
+                <!-- Community service opportunities -->
+                <div id="comServVolunteer" class="hiddenElements">
+                    <a data-hide="comServVolunteer" class="cancelButtons"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                    <br/>
+                    <h2>COMMUNITY SERVICE OPPORTUNITIES</h2>
+                    <label>There are many wonderful resources to find community service work in your area. Below, we've provided you with a few sites to get you started!</label>
+                    <br/>
+                    <label>Additional helpful resources:</label>
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);" onclick="window.open('http://www.stlvolunteer.org/HOC__Volunteer_Opportunity_Search_Page?dstnc=0&k=&p=Se&z=63129');">
+                                STLVolunteer</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" onclick="window.open('http://www.volunteermatch.org/search/index.jsp?r=msa&l=63129');">
+                                VolunteerMatch</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" onclick="window.open('http://www.stlouischildrens.org/ways-give/volunteering/learn-moreapply-now/volunteer-opportunities');">
+                                St. Louis Children's Hospital</a>
+                        </li>
+                    </ul>                
+                </div>
+            </div>
+        </div>
+        
+        
+        <script src="Resources/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+        <script src="Resources/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="Resources/OpenLayers-2.13.1/OpenLayers.js"></script>
+        <script src="CourtFind.js" type="text/javascript"></script>
+    </body>    
+</html>
